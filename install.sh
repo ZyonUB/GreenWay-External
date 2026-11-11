@@ -1,4 +1,5 @@
 #!/bin/bash
+# GreenWay installer build: 2026-11-11-parse-library-fix
 set -euo pipefail
 
 REPO="https://raw.githubusercontent.com/ZyonUB/GreenWay-External/main"
