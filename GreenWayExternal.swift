@@ -260,5 +260,3 @@ enum Page {
         }
     }
 }
-
-GreenWayExternalApp.main()
