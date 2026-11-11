@@ -18,7 +18,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
 fi
 
 echo "Downloading GreenWay source..."
-curl -fL "$REPO/GreenWayExternal.swift?v=2" -o "$WORK_DIR/GreenWayExternal.swift"
+curl -fL "$REPO/GreenWayExternal.swift?v=4" -o "$WORK_DIR/GreenWayExternal.swift"
 
 APP="$WORK_DIR/$APP_NAME.app"
 mkdir -p "$APP/Contents/MacOS"
