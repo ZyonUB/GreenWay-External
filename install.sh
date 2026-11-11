@@ -18,7 +18,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
 fi
 
 echo "Downloading GreenWay source..."
-curl -fL "https://raw.githubusercontent.com/ZyonUB/GreenWay-External/main/GreenWayExternal.swift" -o "$WORK_DIR/GreenWayExternal.swift"
+curl -fL "https://raw.githubusercontent.com/ZyonUB/GreenWay-External/main/GreenWayExternal.swift?cache=$(date +%s)" -o "$WORK_DIR/GreenWayExternal.swift"
 
 APP="$WORK_DIR/$APP_NAME.app"
 mkdir -p "$APP/Contents/MacOS"
@@ -39,8 +39,14 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 </plist>
 PLIST
 
+# Normalize older cached copies of the source before compiling.
+sed -i '' '/^GreenWayExternalApp\.main()$/d' "$WORK_DIR/GreenWayExternal.swift"
 if ! grep -q "^@main" "$WORK_DIR/GreenWayExternal.swift"; then
-  echo "Downloaded source is missing the SwiftUI app entry point."
+  sed -i '' 's/^struct GreenWayExternalApp: App {/@main\
+struct GreenWayExternalApp: App {/' "$WORK_DIR/GreenWayExternal.swift"
+fi
+if ! grep -q "^@main" "$WORK_DIR/GreenWayExternal.swift"; then
+  echo "Could not prepare the SwiftUI app entry point."
   exit 1
 fi
 
