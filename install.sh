@@ -18,7 +18,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
 fi
 
 echo "Downloading GreenWay source..."
-curl -fL "$REPO/GreenWayExternal.swift?v=4" -o "$WORK_DIR/GreenWayExternal.swift"
+curl -fL "$REPO/GreenWayExternal.swift?rev=413de3160c7d0de4d38e1d118f0a1428f95abf52" -o "$WORK_DIR/GreenWayExternal.swift"
 
 APP="$WORK_DIR/$APP_NAME.app"
 mkdir -p "$APP/Contents/MacOS"
@@ -38,6 +38,11 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 </dict>
 </plist>
 PLIST
+
+if grep -q "^@main" "$WORK_DIR/GreenWayExternal.swift"; then
+  echo "Downloaded source is outdated; refusing to build."
+  exit 1
+fi
 
 echo "Building GreenWay..."
 swiftc -parse-as-library -module-name GreenWay -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
