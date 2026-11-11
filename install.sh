@@ -18,7 +18,7 @@ if ! command -v swiftc >/dev/null 2>&1; then
 fi
 
 echo "Downloading GreenWay source..."
-curl -fL "https://raw.githubusercontent.com/ZyonUB/GreenWay-External/a682890077ec265ff8f7cd9f03617b9244252c33/GreenWayExternal.swift" -o "$WORK_DIR/GreenWayExternal.swift"
+curl -fL "https://raw.githubusercontent.com/ZyonUB/GreenWay-External/main/GreenWayExternal.swift" -o "$WORK_DIR/GreenWayExternal.swift"
 
 APP="$WORK_DIR/$APP_NAME.app"
 mkdir -p "$APP/Contents/MacOS"
@@ -39,19 +39,13 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 </plist>
 PLIST
 
-if grep -q "^@main" "$WORK_DIR/GreenWayExternal.swift"; then
-  echo "Downloaded source is outdated; refusing to build."
+if ! grep -q "^@main" "$WORK_DIR/GreenWayExternal.swift"; then
+  echo "Downloaded source is missing the SwiftUI app entry point."
   exit 1
 fi
 
-cat > "$WORK_DIR/main.swift" <<'SWIFTMAIN'
-import SwiftUI
-
-GreenWayExternalApp.main()
-SWIFTMAIN
-
 echo "Building GreenWay..."
-swiftc -module-name GreenWay -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" "$WORK_DIR/main.swift" -o "$APP/Contents/MacOS/GreenWay"
+swiftc -module-name GreenWay -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
 chmod +x "$APP/Contents/MacOS/GreenWay"
 codesign --force --deep --sign - "$APP" >/dev/null 2>&1 || true
 
