@@ -51,7 +51,7 @@ if ! grep -q "^@main" "$WORK_DIR/GreenWayExternal.swift"; then
 fi
 
 echo "Building GreenWay..."
-swiftc -module-name GreenWay -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
+swiftc -parse-as-library -module-name GreenWay -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
 chmod +x "$APP/Contents/MacOS/GreenWay"
 codesign --force --deep --sign - "$APP" >/dev/null 2>&1 || true
 
