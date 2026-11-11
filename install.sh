@@ -40,7 +40,7 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 PLIST
 
 echo "Building GreenWay..."
-swiftc -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
+swiftc -parse-as-library -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
 chmod +x "$APP/Contents/MacOS/GreenWay"
 codesign --force --deep --sign - "$APP" >/dev/null 2>&1 || true
 
