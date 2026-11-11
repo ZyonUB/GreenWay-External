@@ -17,8 +17,8 @@ if ! command -v swiftc >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "Downloading GreenWay..."
-curl -fL "$REPO/GreenWayExternal.swift" -o "$WORK_DIR/GreenWayExternal.swift"
+echo "Downloading GreenWay source..."
+curl -fL "$REPO/GreenWayExternal.swift?v=2" -o "$WORK_DIR/GreenWayExternal.swift"
 
 APP="$WORK_DIR/$APP_NAME.app"
 mkdir -p "$APP/Contents/MacOS"
@@ -40,7 +40,7 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 PLIST
 
 echo "Building GreenWay..."
-swiftc -parse-as-library -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
+swiftc -parse-as-library -module-name GreenWay -O -framework SwiftUI -framework AppKit "$WORK_DIR/GreenWayExternal.swift" -o "$APP/Contents/MacOS/GreenWay"
 chmod +x "$APP/Contents/MacOS/GreenWay"
 codesign --force --deep --sign - "$APP" >/dev/null 2>&1 || true
 
