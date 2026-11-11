@@ -1,6 +1,5 @@
 import SwiftUI
 
-@main
 struct GreenWayExternalApp: App {
     var body: some Scene {
         WindowGroup {
@@ -261,3 +260,5 @@ enum Page {
         }
     }
 }
+
+GreenWayExternalApp.main()
